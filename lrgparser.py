@@ -48,7 +48,7 @@ def sequence_slicer(sequence, coords):
 		start, end = coords[exon]
 		start = int(start)
 		end = int(end)
-		print ">exon %d start: %d, end: %d" % (exon, start, end)
+		print ">exon %d start: %d, end: %d" % (exon+1, start, end)
 		# start must be -1 for indexing, end is ok as the slice locations are between positions
 		print sequence[start-1: end]
 
