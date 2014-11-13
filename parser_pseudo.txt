@@ -1,16 +1,21 @@
 Arguments - [script name, LRG file name]
 
 open file <LRG file name>
-	(more steps go here)
+	input - filename from arguments
+	output - open file for reading
 
 get sequence
-	(more steps go here)
+	inputs - LRG file
+	outputs - string containing genomic sequence
 
 get exon coordinates
-	(more steps go here)
+	inputs - LRG file
+	outputs - list of exon start/finish coordinates
 
 use exon coordinates to slice sequence
-	(more steps go here)
+	input - genomic sequence, list of exon coordinates
+	outputs - list of slices from genomic sequence corresponding to exons 
 
 format slices as FASTA and save
-	(more steps go here)
+	input - list of slices
+	outputs - FASTA text file
