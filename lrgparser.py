@@ -43,7 +43,10 @@ def sequence_slicer(sequence, coords):
 	for exon in range(0, len(coords)):
 		
 		start, end = coords[exon]
+		start = int(start)
+		end = int(end)
 		print "exon %d start: %d, end: %d" % (exon, start, end)
+		print sequence[start-1: end-1]
 
 gsequence, exons = lrg_parse(argv[1])
 sequence_slicer(gsequence, exons)
