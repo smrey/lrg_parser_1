@@ -14,7 +14,7 @@ get exon coordinates
 
 use exon coordinates to slice sequence
 	input - genomic sequence, list of exon coordinates
-	outputs - list of slices from genomic sequence corresponding to exons 
+	outputs - list of slices from genomic sequence corresponding to exons. Corodinates are tuples (start, finish)
 
 format slices as FASTA and save
 	input - list of slices
