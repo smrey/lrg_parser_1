@@ -46,7 +46,8 @@ def sequence_slicer(sequence, coords):
 		start = int(start)
 		end = int(end)
 		print "exon %d start: %d, end: %d" % (exon, start, end)
-		print sequence[start-1: end-1]
+		# start must be -1 for indexing, end is ok as the slice locations are between positions
+		print sequence[start-1: end]
 
 gsequence, exons = lrg_parse(argv[1])
 sequence_slicer(gsequence, exons)
