@@ -34,7 +34,8 @@ def lrg_parse(filename):
 				seq_max_len = len(element.text)
 				gsequence = element.text
 
-	print seq_max_len, len(gsequence)
+	return gsequence, exons
 
 
-lrg_parse(argv[1])
+gsequence, exons = lrg_parse(argv[1])
+
