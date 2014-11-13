@@ -1,32 +1,33 @@
-from sys import argv
+import xml.etree.ElementTree as ET
 
-'''
-LRG file parser
+# opens the file and parses the XML
+tree = ET.parse("LRG_292.xml")
+root = tree.getroot()
 
-Usage: python lrgparser <LRG_filename>
+###################################
+# Iterate through tree and look for exon tags, selecting only those with "label"
+# Each exon label contains 3 sets of start/finish coordinates. We want only the 
+# coordinates for the genomic sequence, so exclude any from transcript or protein
+# so we exclude any with "t" or "p" in the coord_system tag.
+###################################
 
-Opens the given file, checks if file is likely to be an LRG, returns the open file
-'''
-def open_LRG(filename):
-    '''
-    Attempts to open the given filename
+# results list
+exons = []
+seq_max_len = 0
+gsequence = ""
 
-    Returns the open file pointer
-    '''
-    try:
-        f = open(filename, "r")
-    except:
-        print "Error: Could not open file or file does not exist"
+for element in tree.iter():
+	# get the start and finish coordinates for the exons
+	if element.tag == "exon" and "label" in element.attrib:
+		for subelement in element:
+			if "t" not in subelement.attrib["coord_system"] and "p" not in subelement.attrib["coord_system"]:
+				coords = int(subelement.attrib["start"]), int(subelement.attrib["end"])
+				exons.append(coords)
+	# check the sequences, track the longest sequence seen and return the longest as this will be the genomic sequence
+	if element.tag == "sequence":
+		if len(element.text) > seq_max_len:
+			seq_max_len = len(element.text)
+			gsequence = element.text
 
-    # check that the file is an LRG file by looking for the schema def tag
-    isvalid = False
-    # only reads the first 10 lines, may cause problems but simple for now
-    for i in range(0, 10):
-        line = f.readline()
-        if "lrg" in line:
-            isvalid = True
-    assert isvalid == True, "File does not appear to be an LRG file"
+print seq_max_len, len(gsequence)
 
-    return f
-
-open_LRG(argv[1])
