@@ -1,0 +1,16 @@
+Arguments - [script name, LRG file name]
+
+open file <LRG file name>
+	(more steps go here)
+
+get sequence
+	(more steps go here)
+
+get exon coordinates
+	(more steps go here)
+
+use exon coordinates to slice sequence
+	(more steps go here)
+
+format slices as FASTA and save
+	(more steps go here)
