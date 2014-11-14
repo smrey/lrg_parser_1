@@ -1,0 +1,28 @@
+LRG Parser- Team 1
+Developers: Rebecca Haines, Laura Lopez-Pascua, Sara Rey and Ben Sanders 
+User: Mike Cornell
+Development start date: 13/11/14
+Expected delivery date: 14/11/14
+
+User requirements:
+1. Use LRG files in xml format downloaded from http://www.lrg-sequence.org/
+2. Produce a FASTA format file that contains just the sequences of the exons.
+3. Have the option to output the sequences of the exons +/- a specified number of bases, eg for primer design.
+
+Team 1 delivered output:
+A program called lrgparser.py (written in python!) that takes an LRG file as an input and outputs a FASTA format file containing the exon sequences. 
+The FASTA headers contain:
+	gene name
+	LRG file name
+	exon number
+	coordinates of the sequence (based on the LRG genomic sequence)
+
+Delivery of user requirements:
+1. Use LRG files in xml format
+	Tests written to ensure files are in xml format before the program runs
+2. FASTA format file produced
+	Tests written to ensure program fails gracefully if there are errors.
+
+User requirements still in progress:
+3. Not done. This can be added with small modifications to the two of the functions within the program.
+
