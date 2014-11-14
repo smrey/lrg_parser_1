@@ -181,7 +181,7 @@ def fasta_output(exons, accession, outfile):
 		###########################################################
 		# This bit adds the accession number to the start of the 
 		# FASTA header. I would prefer to do this in sequence_slicer,
-		# but don't want to cock up the github
+		# as future work
 		#
 		out.write(">")
 		out.write(accession)
