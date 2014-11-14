@@ -3,22 +3,25 @@ from sys import argv
 
 def lrg_parse(filename):
 	'''
-	This function finds the genomic sequence and exon positions in an LRG file
-	These outputs are used by sequence_slicer()
+	this function opens the xml file and gets the tree and root
 	'''
 	# opens the file and parses the XML
 	tree = ET.parse(filename)
 	root = tree.getroot()
+        return tree
 
-	###################################
-	# Iterate through tree and look for exon tags, selecting only those with "label"
-	# Each exon label contains 3 sets of start/finish coordinates. We want only the 
-	# coordinates for the genomic sequence, so exclude any from transcript or protein
-	# so we exclude any with "t" or "p" in the coord_system tag.
-	###################################
+###################################
+# Iterate through tree and look for exon tags, selecting only those with "label"
+# Each exon label contains 3 sets of start/finish coordinates. We want only the 
+# coordinates for the genomic sequence, so exclude any from transcript or protein
+# so we exclude any with "t" or "p" in the coord_system tag.
+###################################
 
+def lrg_sequence(tree):
+        '''
+        to get the genomic sequence
+        '''
 	# results list
-	exons = []
 	seq_max_len = 0
 	gsequence = ""
 
@@ -28,24 +31,22 @@ def lrg_parse(filename):
 			if len(element.text) > seq_max_len:
 				seq_max_len = len(element.text)
 				gsequence = element.text
-		# get the start and finish coordinates for the exons
+	return gsequence	
+
+def lrg_exoncoord(tree):
+        '''
+        to get the exon coordinates
+        '''
+	exons = []
+
+        for element in tree.iter():
+        # get the start and finish coordinates for the exons
 		if element.tag == "exon" and "label" in element.attrib:
 			for subelement in element:
 				if "t" not in subelement.attrib["coord_system"] and "p" not in subelement.attrib["coord_system"]:
 					coords = int(subelement.attrib["start"]), int(subelement.attrib["end"])
 					exons.append(coords)
-
-
-
-
-
-
-
-
-
-		
-
-	return gsequence, exons
+	return exons
 
 def sequence_slicer(sequence, coords):
 	'''
@@ -62,6 +63,8 @@ def sequence_slicer(sequence, coords):
 		# start must be -1 for indexing, end is ok as the slice locations are between positions
 		print sequence[start-1: end]
 
-gsequence, exons = lrg_parse(argv[1])
+tree = lrg_parse(argv[1])
+gsequence = lrg_sequence(tree)
+exons = lrg_exoncoord(tree)
 sequence_slicer(gsequence, exons)
 
