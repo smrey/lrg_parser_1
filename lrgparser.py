@@ -87,6 +87,7 @@ def lrg_exoncoord(tree):
 						print "input coordinates are not integers"			
 					exons.append(coords)	
 	
+	# check that the exon coordinates have been correctly input
 	assert exons != [], "List of exon co-ordinates is empty. No exon co-ordinates stored."
 	for tup in exons:
 		try:
