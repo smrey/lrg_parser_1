@@ -91,10 +91,10 @@ def sequence_slicer(sequence, coords):
 		start, end = coords[exon]
 		start = int(start)
 		end = int(end)
-		print ">exon %d start: %d, end: %d" % (exon+1, start, end)
+		info = "exon %d start: %d, end: %d" % (exon+1, start, end)
 		#exon name could be taken directly from file to account for eg exon 1b.
 		# start must be -1 for indexing, end is ok as the slice locations are between positions
-		print sequence[start-1: end]
+		return info, sequence[start-1: end]
 
 def get_gene_info(tree):
 	'''
