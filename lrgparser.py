@@ -61,7 +61,7 @@ def lrg_sequence(tree):
 	nucleotides = ['A','C','T','G']
 
 	for nuc in gsequence:
-    		assert nuc in nucleotides, "Mistake- sequence contains characters other than A, T, C or G (note: case sensitive)
+    		assert nuc in nucleotides, "Mistake- sequence contains characters other than A, T, C or G (note: case sensitive)"
 	return gsequence
 
 
