@@ -54,14 +54,17 @@ def sequence_slicer(sequence, coords):
 	These are used to output a FASTA formatted file that contains the sections of 
 	sequence defined by the coordinates.
 	'''
+	exons = []
 	for exon in range(0, len(coords)):
 		
 		start, end = coords[exon]
 		start = int(start)
 		end = int(end)
-		print ">exon %d start: %d, end: %d" % (exon+1, start, end)
+		info = "exon %d start: %d, end: %d" % (exon+1, start, end)
 		# start must be -1 for indexing, end is ok as the slice locations are between positions
-		print sequence[start-1: end]
+		exon = info, sequence[start-1: end]
+		exons.append(exon)
+	return exons
 
 tree = lrg_parse(argv[1])
 gsequence = lrg_sequence(tree)
