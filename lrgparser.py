@@ -13,9 +13,6 @@ exonic coordinates.
 
 Usage: python lrgparser.py <input_file>
 
-If you break it, it's probably your fault.
-
-The code is correct. Reality is occasionally wrong.
 '''
 
 def lrg_parse(filename):
