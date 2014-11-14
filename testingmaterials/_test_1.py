@@ -7,7 +7,7 @@ from sys import argv
 def lrg_parse(filename):
 	'''
 	In this test, this function opens the xml file and gets the tree and root
-	Example usage: lrg_parse(LRG_292.xml)
+	Example usage: In this test, this function is called directly by another function.
 	'''
 	# opens the file and parses the XML
 	tree = ET.parse(filename)
@@ -19,7 +19,7 @@ def lrg_sequence(tree): ##Taken from original code- gsequence can be read direct
 	'''
 	In this test, this function gets the genomic sequence in the same way as it is done within the code.
 	A future piece of work will be to read this output in from the code (as it actually ran) in a more efficient way.
-	Example usage: In this test, requires that lrg_parse be run and is called directly by another function.
+	Example usage: In this test, this function is called directly by another function.
 	'''	
 	#to get the genomic sequence
 	# results list
