@@ -96,9 +96,91 @@ def sequence_slicer(sequence, coords):
 		# start must be -1 for indexing, end is ok as the slice locations are between positions
 		print sequence[start-1: end]
 
-tree = lrg_parse(argv[1])
-gsequence = lrg_sequence(tree)
-exons = lrg_exoncoord(tree)
-sequence_slicer(gsequence, exons)
+def get_gene_info(tree):
+	'''
+	Looks through the xml tree to find the details of the gene
+	
+	Inputs: tree - XML etree
+	
+	Outputs: (Accession number, LRG ID number, gene name)
+	'''
 
-#lrg_parser(filename, upstream = 0, downstream = 0)
+	# default values in case nothing is found, so the rest of the program will work
+	accnumber = "Accession_Number_Not_Found"
+	LRGid = "LRG_ID_Not_Found"
+	gname = "Gene_Name_Not_Found"
+
+	# get the key details from the xml
+	# NOTE: if multiples are found, this will keep the last one
+	for node in tree.iter('sequence_source'):
+		accnumber = node.text
+	for node in tree.iter('id'):
+		LRGid = node.text
+	for node in tree.iter('lrg_locus'):
+		gname = node.text
+
+	assert accnumber != "", "Accession number has no assigned value"
+	assert LRGid != "", "LRG ID has no assigned value"
+	assert gname != "", "Gene name has no assigned value"
+
+	return accnumber, LRGid, gname
+
+def fasta_output(exons, accession, outfile):
+	'''
+	Writes the list of exons to a fasta file.
+	Inputs: exons - list of header/sequence tuples for each exon of the gene
+		accession - accession number of the gene
+		outfile - name of the file to write to
+	
+	Outputs: <outfile>.fa 
+	'''
+
+	try: 
+		out = open(outfile, "w")
+	except:
+		print "could not open output file"
+
+	for exon in exons:
+		header, sequence = exon
+		###########################################################
+		# This bit adds the accession number to the start of the 
+		# FASTA header. I would prefer to do this in sequence_slicer,
+		# but don't want to cock up the github
+		#
+		out.write(">")
+		out.write(accession)
+		###########################################################
+		out.write(header)
+		out.write("\n")
+
+		# write the sequence with a newline every 80 characters,
+		# for readability and also (i think) to meet FASTA standard
+		# there is probably no reason for this not to be hard coded
+		#
+		# CHECK THE FULL LENGTH EXON IS PRINTING
+		#
+
+		for i in range(1, len(sequence)):
+			if i % 80 == 0:
+				out.write(sequence[i])
+				out.write("\n")
+			else:
+				out.write(sequence[i])
+		# add an empty line between exons, for neatness
+		out.write("\n\n")
+
+def run_parser(infile):
+	'''
+	To run, combines all the functions into a (hopefully) sensible thing
+	'''
+	tree = lrg_parse(infile)
+	gsequence = lrg_sequence(tree) 
+	exons = lrg_exoncoord(tree)
+	exon_sequences = sequence_slicer(gsequence, exons)
+	accession, lrgid, gname = get_gene_info(tree)
+	out = lrgid + ".fa"
+	fasta_output(exon_sequences, accession, out)
+
+# Ideally the argv options should be properly parsed, this may balls up with the wrong number of inputs...
+infile = argv[1]
+run_parser(infile)
