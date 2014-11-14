@@ -97,7 +97,7 @@ def lrg_exoncoord(tree):
 			print "Error: Missing co-ordinate in list of exon co-ordinates"	
 
 	for tupInd in range(len(exons)-1):
-		assert exons[tupInd][1] < exons[tupInd+1][0], "Exon n starts before the end of exon n-1"
+		assert exons[tupInd][1] < exons[tupInd+1][0], "Exon n starts before the end of exon n-1 or this LRG file may contain alternate transcripts" ##(To handle better in future work)
 
 	return exons
 
