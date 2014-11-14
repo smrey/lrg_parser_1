@@ -1,0 +1,6 @@
+We need to add authors, dates, version, contact (email) etc. (good practice) (some of this is also on git but it doesn't hurt to be thorough)
+Do the documentation for testing and also don't forget code. Also example of how to run code.
+User guide? If time.
+Create a testing document.
+Use nosetests? If time.
+Finish creation of test suites (lists of values to pass in and expected result).
