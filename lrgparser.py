@@ -38,13 +38,13 @@ def lrg_sequence(tree):
 			if len(element.text) > seq_max_len:
 				seq_max_len = len(element.text)
 				gsequence = element.text
+	assert len(gsequence) > 0, "The pulled sequence's length is 0"	
 					
 	#Checks that gsequence contains only A, C, T, G.
 	nucleotides = ['A','C','T','G']
 
 	for nuc in gsequence:
     		assert nuc in nucleotides, "Mistake- sequence contains characters other than A, T, C or G"
-
 	return gsequence
 
 
@@ -63,8 +63,7 @@ def lrg_exoncoord(tree):
 					try:					
 						coords = int(subelement.attrib["start"]), int(subelement.attrib["end"])
 					except TypeError:
-						print "input coordinates are not integers"	
-				
+						print "input coordinates are not integers"			
 					exons.append(coords)	
 	
 	assert exons != [], "List of exon co-ordinates is empty. No exon co-ordinates stored."
@@ -92,10 +91,13 @@ def sequence_slicer(sequence, coords):
 		start, end = coords[exon]
 		start = int(start)
 		end = int(end)
+		assert end <= len(sequence), "Co-ordinates lie outside of the range of the sequence"
 		info = "exon %d start: %d, end: %d" % (exon+1, start, end)
 		slicesequence = sequence[start-1: end]
+		exonSeq = sequence[start-1: end]
 		# exon name could be taken directly from file to account for eg exon 1b.
 		# start must be -1 for indexing, end is ok as the slice locations are between positions
+		assert len(exonSeq) > 0, "Exon is not long enough, it has fewer than 1 nucleotide"		
 		exon = info, slicesequence
 		exons.append(exon)
 	
