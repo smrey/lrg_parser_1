@@ -1,9 +1,31 @@
 import xml.etree.ElementTree as ET
 from sys import argv
 
+'''
+Locus Reference Genomic (LRG) file simple exon parser.
+------------------------------------------------------
+
+Extracts the exonic sequences defined in the primary transcript of 
+an LRG file defined by the user. Currently very basic, but has plenty
+of scope for future expansion. Should handle pretty much any case,
+including incorrect or malformed LRG, with basic sanity checking for 
+exonic coordinates.
+
+Usage: python lrgparser.py <input_file>
+
+If you break it, it's probably your fault.
+
+The code is correct. Reality is occasionally wrong.
+'''
+
 def lrg_parse(filename):
 	'''
-	this function opens the xml file and gets the tree and root
+	Opens the LRG file and parses the XML using etree.
+	Only accepts valid LRG version 1.8 files.
+
+	Inputs : filename - a valid LRG file.
+	
+	Outputs : tree - an etree parsed XML tree.
 	'''
 	# opens the file and parses the XML
 	
@@ -16,24 +38,22 @@ def lrg_parse(filename):
 		print "Error: Not an xml file or ElementTree not installed"
 	return tree
 
-
-###################################
-# Iterate through tree and look for exon tags, selecting only those with "label"
-# Each exon label contains 3 sets of start/finish coordinates. We want only the 
-# coordinates for the genomic sequence, so exclude any from transcript or protein
-# so we exclude any with "t" or "p" in the coord_system tag.
-###################################
-
 def lrg_sequence(tree):
 	'''
-	to get the genomic sequence
+	Extracts the genomic sequence from the LRG file.
+	
+	Inputs : tree - an etree parsed XML tree.
+	
+	Outputs : gsequence - single line string containing the genomic 
+		 	      sequence of the LRG gene.
 	'''
 	# results list
 	seq_max_len = 0
 	gsequence = ""
 
 	for element in tree.iter():
-		# check the sequences, track the longest sequence seen and return the longest as this will be the genomic sequence
+		# check the sequences, track the longest sequence seen and 
+		# return the longest as this will be the genomic sequence
 		if element.tag == "sequence":
 			if len(element.text) > seq_max_len:
 				seq_max_len = len(element.text)
@@ -50,7 +70,11 @@ def lrg_sequence(tree):
 
 def lrg_exoncoord(tree):
 	'''
-	to get the exon coordinates
+	Extracts start and finish coordinates of exons in LRG file
+	
+	Inputs : tree - an etree parsed XML tree.
+	
+	Outputs : exons - tuple (start_coordinates, end_coordinates)
 	'''
 	exons = []
 
@@ -84,15 +108,19 @@ def sequence_slicer(sequence, coords):
 	This function takes the sequence and coordinates from lrg_parse()
 	These are used to output a FASTA formatted file that contains the sections of 
 	sequence defined by the coordinates.
+	
+	Inputs : sequence - The genomic sequence of the gene extracted by lrg_sequence()
+		 coords - List of exons, defined by start and finish coordinates.
+		 	  From lrg_exoncoord().
+	Outputs : exons - list of tuple(exon details, exon sequence)
 	'''
 	exons = []
 	for exon in range(0, len(coords)):
-	
 		start, end = coords[exon]
 		start = int(start)
 		end = int(end)
 		assert end <= len(sequence), "Co-ordinates lie outside of the range of the sequence"
-		info = "exon %d start: %d, end: %d" % (exon+1, start, end)
+		info = "exon%d|start: %d|end: %d" % (exon+1, start, end)
 		slicesequence = sequence[start-1: end]
 		exonSeq = sequence[start-1: end]
 		# exon name could be taken directly from file to account for eg exon 1b.
@@ -107,9 +135,12 @@ def get_gene_info(tree):
 	'''
 	Looks through the xml tree to find the details of the gene
 	
-	Inputs: tree - XML etree
+	Inputs : tree - an etree parsed XML tree.
 	
-	Outputs: (Accession number, LRG ID number, gene name)
+	Outputs : tuple (accnumber - Gene accession number,
+			LRGid - LRG gene ID number,
+			gname - Name of gene from LRG file)
+			   
 	'''
 
 	# default values in case nothing is found, so the rest of the program will work
@@ -135,11 +166,12 @@ def get_gene_info(tree):
 def fasta_output(exons, accession, outfile):
 	'''
 	Writes the list of exons to a fasta file.
-	Inputs: exons - list of header/sequence tuples for each exon of the gene
+	
+	Inputs : exons - list of header/sequence tuples for each exon of the gene
 		accession - accession number of the gene
 		outfile - name of the file to write to
 	
-	Outputs: <outfile>.fa 
+	Outputs : writes to <outfile>.fa 
 	'''
 
 	try: 
@@ -168,7 +200,7 @@ def fasta_output(exons, accession, outfile):
 		#
 
 		for i in range(1, len(sequence)):
-			if i % 80 == 0:
+			if i > 1 and % 80 == 0:
 				out.write(sequence[i])
 				out.write("\n")
 			else:
@@ -178,7 +210,9 @@ def fasta_output(exons, accession, outfile):
 
 def run_parser(infile):
 	'''
-	To run, combines all the functions into a (hopefully) sensible thing
+	Groups commands into a single function, purely for neatness.
+	Plenty of stuff here that would change if we added more options,
+	e.g. custom output filename, flanking intron sequence, etc.
 	'''
 	tree = lrg_parse(infile)
 	gsequence = lrg_sequence(tree) 
@@ -188,6 +222,12 @@ def run_parser(infile):
 	out = lrgid + ".fa"
 	fasta_output(exon_sequences, accession, out)
 
-# Ideally the argv options should be properly parsed, this may balls up with the wrong number of inputs...
-infile = argv[1]
-run_parser(infile)
+# Get the first argument from argv as this should be the input filename
+# Not currently a very well handled system, but would use argparse or
+# similar if using more command line options
+
+if len(argv) != 2:
+	print "Usage: python lrgparser.py <input_file>"
+else:
+	infile = argv[1]
+	run_parser(infile)
