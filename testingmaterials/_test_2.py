@@ -19,6 +19,12 @@ def _test_2(xmlfilename, fastafilename):
         for element in tree.iter():
 		if element.tag == "exon" and "label" in element.attrib:
 			xmlExonCount += 1
+			######## Started mamtching exon names- unfinished...
+			'''
+			for subelement in element:
+				if "t" not in subelement.attrib["coord_system"] and "p" not in subelement.attrib["coord_system"]:
+					print subelement.attrib["coord_system"]
+			'''
 
 	
 	#Parse FASTA file and counts the number of headers
