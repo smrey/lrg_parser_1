@@ -200,7 +200,7 @@ def fasta_output(exons, accession, outfile):
 		#
 
 		for i in range(1, len(sequence)):
-			if i > 1 and % 80 == 0:
+			if i > 1 and i % 80 == 0:
 				out.write(sequence[i])
 				out.write("\n")
 			else:
