@@ -3,10 +3,13 @@
 
 #Import file
 ##TO DO
-gsequence = 'AGCTAG2TCGATCT'
+gsequence = 'zAGCTAGTCGATCTz'
 
 nucleotides = ['A','C','T','G']
 
 for nuc in gsequence:
-    assert nuc in nucleotides, "Mistake"
-    print 'working fine'
+    if nuc not in nucleotides:
+        #print 'error'
+        raise Exception, "Non-nucleotide character in sequence"
+    else:
+        print 'yay'
