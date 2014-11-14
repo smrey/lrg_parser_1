@@ -1,0 +1,16 @@
+Part 1 : Testing the files inputted are of the correct type and format.
+  test1_lrgfile.xml checks whether the xml file put in is an LRG file (by changing the root).
+  test2_lrgver.xml checks whether the LRG version is the current version, showing an error if the version is not supported.
+  test3_notxml.xml is a normal text file, not xml
+
+Part 2: Testing the sequence obtained by our code has no errors (is formed of nucleotidies ATCG)
+  test4_seq-.xml error: sequence has a hyphen instead of a nucleotide. 
+  test4_seq1.xml error: sequence has an integer within it. 
+  test4_seqZ.xml error: sequence has str Z-> not a nucleotide
+  test4_seqa.xml error: sequence has a lowercase a. Sequence should be all upper case. 
+  
+Part 3: Testing the obtention of the coordinates
+  test6_coord2b1.xml Coordinates should be integers. This sequence containes a str
+  test6_coordodd.xml Missing end or starting coordinates in exon
+  test6_coordr.xml  Exon n ends before it starts
+  test6_coordsm.xml Exon n ends after Exon n+1 starts
