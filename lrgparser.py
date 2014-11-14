@@ -29,6 +29,7 @@ def lrg_parse(filename):
 					coords = int(subelement.attrib["start"]), int(subelement.attrib["end"])
 					exons.append(coords)
 		# check the sequences, track the longest sequence seen and return the longest as this will be the genomic sequence
+        ## Could be separate function? ##
 		if element.tag == "sequence":
 			if len(element.text) > seq_max_len:
 				seq_max_len = len(element.text)
