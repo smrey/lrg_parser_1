@@ -86,8 +86,12 @@ def sequence_slicer(sequence, coords):
 def get_gene_info(tree):
 	'''
 	Looks through the xml tree to find the details of the gene
-	Returns a tuple ordered as (Accession number, LRG ID number, gene name)
+	
+	Inputs: tree - XML etree
+	
+	Outputs: (Accession number, LRG ID number, gene name)
 	'''
+
 	# default values in case nothing is found, so the rest of the program will work
 	accnumber = "Accession_Number_Not_Found"
 	LRGid = "LRG_ID_Not_Found"
@@ -111,7 +115,13 @@ def get_gene_info(tree):
 def fasta_output(exons, accession, outfile):
 	'''
 	Writes the list of exons to a fasta file.
+	Inputs: exons - list of header/sequence tuples for each exon of the gene
+		accession - accession number of the gene
+		outfile - name of the file to write to
+	
+	Outputs: <outfile>.fa 
 	'''
+
 	try: 
 		out = open(outfile, "w")
 	except:
