@@ -66,8 +66,36 @@ def sequence_slicer(sequence, coords):
 		exons.append(exon)
 	return exons
 
+def fasta_output(exons, outfile="lrgparser_output"):
+	'''
+	Writes the list of exons to a fasta file
+	'''
+	try: 
+		out = open(outfile, "w")
+	except:
+		print "could not open output file"
+
+	for exon in exons:
+		header, sequence = exon
+		out.write(header)
+		# write the sequence with a newline every 80 characters,
+		# for readability and also (i think) to meet FASTA standard
+		# there is probably no reason for this not to be hard coded
+		for i in range(0, len(sequence)):
+			if i % 80 == 0:
+				out.write(sequence[i])
+				out.write("\n")
+			else:
+				out.write(sequence[i])
+		# add an empty line between exons
+		out.write("\n\n")
+
+# Ideally the argv options should be properly parsed, this may balls up with the wrong number of inputs...
 tree = lrg_parse(argv[1])
 gsequence = lrg_sequence(tree)
 exons = lrg_exoncoord(tree)
-sequence_slicer(gsequence, exons)
-
+exon_sequences = sequence_slicer(gsequence, exons)
+if len(argv) > 2:
+	fasta_output(exon_sequences, argv[2])
+else:
+	fasta_output(exon_sequences)
