@@ -1,3 +1,8 @@
+# lrgarser.py
+# Developers: Rebecca Haines, Laura Lopez-Pascua, Sara Rey, Ben Sanders
+# Contact: ben.sanders-2@postgrad.manchester.ac.uk
+# Development date 14/11/14
+
 import xml.etree.ElementTree as ET
 from sys import argv
 
