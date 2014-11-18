@@ -1,0 +1,23 @@
+Testing Process- a brief guide to the general layout and location of the testing files
+We created a series of tests in separate .py files to test the correct functioning of the code. The text in the comments associated with each file briefly explain the rationale of the test.
+These are in the folder testingmaterials and are labelled as test_1-8.py. Most of the separate files were then incorporated into the final code.
+Two tests were kept separate from the main code. These are called _test_1.py and _test_2.py. These have been copied to the FinalTests folder.
+
+In addition to this, we created the following files to test the defensive programming incorporated in the main code.
+
+Part 1 : Testing the input files are of the correct type and format.
+  test1_lrgfile.xml checks whether the xml file put in is an LRG file (by changing the root).
+  test2_lrgver.xml checks whether the LRG version is the current version, showing an error if the version is not supported.
+  test3_notxml.xml is a normal text file, not xml
+
+Part 2: Testing the sequence obtained by our code has no errors (is formed of nucleotides ATCG)
+  test4_seq-.xml error: sequence has a hyphen instead of a nucleotide. 
+  test4_seq1.xml error: sequence has an integer within it. 
+  test4_seqZ.xml error: sequence has str Z-> not a nucleotide
+  test4_seqa.xml error: sequence has a lowercase a. Sequence should be all upper case. 
+  
+Part 3: Testing correct coordinates are obtained
+  test6_coord2b1.xml Coordinates should be integers. This sequence containes a str
+  test6_coordodd.xml Missing end or starting coordinates in exon
+  test6_coordr.xml  Exon n ends before it starts
+  test6_coordsm.xml Exon n ends after Exon n+1 starts
